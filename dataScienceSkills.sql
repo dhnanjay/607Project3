@@ -1,6 +1,7 @@
 /* 
 username = 'data607'
 password = 'project3'
+dbname = 'dataScienceSkills'
 host = 'data607-project3.ce2dfe0qxt5q.us-west-2.rds.amazonaws.com'
 */
 
