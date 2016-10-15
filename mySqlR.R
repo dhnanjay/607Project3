@@ -15,3 +15,11 @@ fetch(insertQry, n = -1)
 selectQry = dbSendQuery(myDb, "SELECT * FROM skill_names;")
 results = fetch(selectQry, n = -1)
 results
+
+# example of converting data frame into part of SQL query
+df = data.frame(skill_name = c('R', 'Python', 'SQL'))
+df$skill_name = paste0("(NULL, '", df$skill_name, "')")
+values = paste(unlist(df, use.names = F), collapse = ', ')
+qryString = paste("INSERT INTO skill_names (skill_id, skill_name) VALUES ", values, ";")
+insertQry = dbSendQuery(myDb, qryString)
+fetch(insertQry, n = -1)

@@ -11,7 +11,8 @@ CREATE TABLE skill_names
 (
 	skill_id int NOT NULL AUTO_INCREMENT,
     skill_name varchar(100) NOT NULL,
-    PRIMARY KEY (skill_id)
+    PRIMARY KEY (skill_id),
+    UNIQUE (skill_name)
 );
 
 
@@ -38,4 +39,3 @@ CREATE TABLE skill_count
 
 SELECT * FROM skill_names;
 
-insert into skill_names (skill_id, skill_name) values (NULL, 'Statistics');
