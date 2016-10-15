@@ -43,10 +43,11 @@ for (i in 1:nrow(nData)) {
 }
 
 nData$url <- NULL
+# does not write column Text because of sheer size
+#write.csv(nData, file = "output1.csv")
 
+finalData <- data.frame(nData$postingID, nData$SearchTerm, nData$job.title, nData$company, nData$date, nData$location, nData$summary, nData$kWord)
 
-finalData <- data.frame(nData$postingID, nData$SearchTerm, nData$job.title, nData$company, nData$date, nData$location, nData$kWord)
-
-head(finalData)
+write.csv(finalData, file = "output2.csv")
 
 
