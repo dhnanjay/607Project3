@@ -1,7 +1,7 @@
 library(boilerpipeR)
 library(RCurl)
 
-list = read.csv("https://github.com/dhnanjay/607Project3/blob/master/directlinks/links.csv")
+list = read.csv("c:/data/links.csv")
 
 for (i in 1:nrow(list))
 {
