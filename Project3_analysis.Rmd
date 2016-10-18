@@ -1,0 +1,153 @@
+---
+title: "Project 3"
+author: "Andrew Carson"
+date: "October 16, 2016"
+output: html_document
+---
+
+### Load Data
+
+```{r eval=TRUE}
+library(dbConnect)
+
+
+
+username = 'data607'
+
+password = 'project3'
+
+dbname = 'ds_skills'
+
+host = 'data607-project3.ce2dfe0qxt5q.us-west-2.rds.amazonaws.com'
+
+myDb = dbConnect(MySQL(), user=username, password=password, dbname=dbname, host=host)
+
+
+
+qryString = 'SELECT jobs.post_id, role_desc, city, state, keyword_desc 
+
+FROM jobs
+
+INNER JOIN locations
+
+ON jobs.loc_id = locations.loc_id
+
+INNER JOIN roles
+
+ON jobs.role_id = roles.role_id
+
+INNER JOIN post_keys
+
+ON jobs.post_id = post_keys.post_id 
+
+INNER JOIN  keywords
+
+ON post_keys.key_id = keywords.key_id
+
+;'
+
+
+
+selectQry = dbSendQuery(myDb, qryString)
+
+results = fetch(selectQry, n = -1)
+
+##results
+```
+* * *
+
+### Begin Analysis
+
+```{r}
+library(ggplot2)
+library(tidyr)
+library(dplyr)
+library(knitr)
+
+# counts of keywords
+keyword_counts<-data.frame(table(results$keyword_desc))
+names(keyword_counts)<-c("Keyword","Freq")
+head(arrange(keyword_counts,desc(Freq)), n=10)
+
+
+
+#count of role description
+distinct_roles<-distinct(select(results, post_id,role_desc))
+distinct_roles<-data.frame(table(distinct_roles$role_desc))
+names(distinct_roles)<-c("Role","Freq")
+head(arrange(distinct_roles,desc(Freq)), n=10)
+
+#role vs. keyword counts
+role_vs_Keyword<-results %>%
+  select(role_desc,keyword_desc) %>%
+  group_by(role_desc, keyword_desc) %>%
+  count(role_desc, keyword_desc) %>%
+  spread(role_desc,n)
+  
+kable(role_vs_Keyword)
+
+## show top keywords for each role
+# Data Analyst
+arrange(role_vs_Keyword, desc(`Data Analyst`)) %>%
+  select(keyword_desc, `Data Analyst`) %>%
+  slice(1:10)
+
+# Data Engineer
+arrange(role_vs_Keyword, desc(`Data Engineer`)) %>%
+  select(keyword_desc, `Data Engineer`) %>%
+  slice(1:10)
+
+# Data_Scientist
+arrange(role_vs_Keyword, desc(`Data_Scientist`)) %>%
+  select(keyword_desc, `Data_Scientist`) %>%
+  slice(1:10)
+
+# Jr. Data Scientist
+arrange(role_vs_Keyword, desc(`Jr. Data Scientist`)) %>%
+  select(keyword_desc, `Jr. Data Scientist`) %>%
+  slice(1:10)
+
+# Sr. Data Scientist
+arrange(role_vs_Keyword, desc(`Sr. Data Scientist`)) %>%
+  select(keyword_desc, `Sr. Data Scientist`) %>%
+  slice(1:10)
+
+
+
+#count of city
+distinct_city<-distinct(select(results, post_id, city))
+distinct_city<-data.frame(table(distinct_city$city))
+names(distinct_city)<-c("city","Freq")
+head(arrange(distinct_city,desc(Freq)), n=10)
+
+#city vs. keyword counts
+city_vs_Keyword<-results %>%
+  select(city,keyword_desc) %>%
+  group_by(city, keyword_desc) %>%
+  count(city, keyword_desc) %>%
+  spread(city,n)
+  
+kable(city_vs_Keyword)
+
+
+
+#count of state
+distinct_state<-distinct(select(results, post_id, state))
+distinct_state<-data.frame(table(distinct_state$state))
+names(distinct_state)<-c("state","Freq")
+head(arrange(distinct_state,desc(Freq)), n=10)
+
+
+#state vs. keyword counts
+state_vs_Keyword<-results %>%
+  select(state,keyword_desc) %>%
+  group_by(state, keyword_desc) %>%
+  count(state, keyword_desc) %>%
+  spread(state,n)
+  
+kable(state_vs_Keyword)
+
+
+```
+
+
