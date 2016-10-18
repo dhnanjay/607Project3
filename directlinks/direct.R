@@ -1,6 +1,7 @@
 library(boilerpipeR)
 library(RCurl)
 library(stringr)
+library(stringi)
 
 #read the file with links
 list = read.csv("c:/data/links.csv", stringsAsFactors = FALSE)
@@ -31,4 +32,26 @@ for (i in 1:nrow(list))
 }
 
 
+
+
+# read in keywords to search
+skills = read.csv("c:/data/skills.csv", stringsAsFactors = FALSE,  header=F)
+
+#Search the keywords through the data set
+
+total = 0
+for (i in 1:nrow(skills))
+{
+  for (j in 1:nrow(list))
+  {
+    ctr = stri_count_regex(list$description[j], skills$V1[i])
+    total = total+ctr
+  }
+  skills$count[i] = total
+  total = 0
+}
+
+#File dump, run as needed
 #write.csv(list, file = "monster.csv")
+#write.csv(skills, file = "monster_results.csv")
+
