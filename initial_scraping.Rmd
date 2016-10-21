@@ -31,7 +31,11 @@ data.raw[] <- lapply(data.raw, tolower)
 -Load keyword tags
 
 ```{r tags, include=TRUE}
+<<<<<<< HEAD
 tags <- c(' r ',' r . ', ' c++ ', 'python', 'java', 'ruby', 'javascript',
+=======
+tags <- c(' r ',' r. ', ' c++ ', 'python', 'java', 'ruby', 'javascript',
+>>>>>>> 2c1a1277cf1b70add4891337b348c6db1efa15b2
 			    'matlab', 'scala', 'excel',	'tableau', 'd3.js', 'sas','spss',	'd3',
           'hadoop', 'mapreduce',	'spark', 'pig',	'hive',	'shark','oozie',
 			    'zookeeper', 'flume',	'mahout',	'sql', 'snosql','hbase','cassandra',
@@ -67,6 +71,10 @@ mutate(keywordtag = sapply(str_extract_all(description, tag_ex), function(x) pas
 -Create .csv file
 
 ```{r csv, include=TRUE}
+<<<<<<< HEAD
 write.csv(data, file = "data1.csv", row.names = FALSE)
+=======
+write.csv(data, file = "data2.csv", row.names = FALSE)
+>>>>>>> 2c1a1277cf1b70add4891337b348c6db1efa15b2
 ```
 
