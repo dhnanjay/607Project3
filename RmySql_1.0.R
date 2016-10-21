@@ -8,7 +8,7 @@ dbname = 'ds_skills'
 host = 'data607-project3.ce2dfe0qxt5q.us-west-2.rds.amazonaws.com'
 myDb = dbConnect(MySQL(), user=username, password=password, dbname=dbname, host=host)
 
-my_data <- read.csv("https://raw.githubusercontent.com/dhnanjay/607Project3/master/data1.csv", 
+my_data <- read.csv("https://raw.githubusercontent.com/dhnanjay/607Project3/master/data2.csv", 
                     stringsAsFactors = FALSE)
 
 # roles df
@@ -60,7 +60,7 @@ fetch(insertQry, n = -1)
 # jobs df
 jobs <- my_data
 names(jobs)[names(jobs)=="Job_Title"] <- "role_desc"
-names(jobs)[names(jobs)=="X"] <- "post_id"
+jobs$post_id <-seq.int(nrow(jobs))
 jobs <- merge(jobs, roles, by ="role_desc")
 jobs <- merge(jobs, locations, by= c("City","State"))
 jobs <- subset(jobs, select= c(post_id,role_id,loc_id))
