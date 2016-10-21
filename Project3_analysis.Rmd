@@ -73,13 +73,17 @@ library(knitr)
 library(DT)
 library(stringr)
 
+#trim white space
+results$keyword_desc<-str_trim(results$keyword_desc)
+
 # counts of keywords
 keyword_counts<-data.frame(table(results$keyword_desc))
 names(keyword_counts)<-c("Keyword","Freq")
-head(arrange(keyword_counts,desc(Freq)), n=10)
+keyword_counts$Keyword<-as.character(keyword_counts$Keyword)
+head(arrange(keyword_counts,desc(Freq)), n=11)
 ```
 
-We see that Excel tops the list, followed by JAVA, SQL, and Python.  Interestingly, R is not near the top.
+We see that communication tops the list, followed by Excel, JAVA, SQL, machine learning, and Python.  R comes in at number 11.
 
 We add a plot to visualize the result.
 ```{r, message=FALSE}
@@ -89,7 +93,7 @@ qplot(data = keyword_counts, x = reorder(Keyword, -Freq), y=Freq, xlab="Keyword"
         axis.text.x = element_text(angle=90, vjust=1)) 
 ```
 
-We can see that R is much further down with only 16 counts.  Overall, we see programming languages (JAVA, Python), statistical languages (R, SAS), big data languages(Pig, Hive), big data technologies (mapreduce, Hadoop), standard data skills (Excel, SQL), and visualization (Tableau, d3).
+Overall, we see programming languages (JAVA, Python), statistical languages (R, SAS), big data languages(Pig, Hive), big data technologies (mapreduce, Hadoop), standard data skills (Excel, SQL), and visualization (Tableau, d3).  We also see a lot of "soft skills" or broad topic knowledge like communication, deep learning, math, "big data", "data mining", etc.
 
 Adding nuance, what sorts of roles are we looking at that matched our search query when finding data?
 
@@ -133,7 +137,7 @@ datatable(keyword_vs_role)
 Since we are most interested in "data scientists", let's look at job titles that match "data-scientist":
 
 ```{r, message=FALSE, warning=FALSE}
-## show top keywords for data-scientist
+# show top keywords for data-scientist
 top_data_scientist<-
   arrange(role_vs_Keyword, desc(`data-scientist`)) %>%
   select(keyword_desc, `data-scientist`) 
@@ -144,12 +148,12 @@ qplot(data = top_data_scientist, x = reorder(keyword_desc, -`data-scientist`), y
         axis.text.x = element_text(angle=90, vjust=1)) 
 ```
 
-Excel, Python, Hadoop, and SQL are the top four skills.  Interestingly, R is not a skill that is associated with the "data-scientist" job title.
+Machine learning, Excel, Python, statistics, Hadoop, R, and communication are the top skills.
 
 What about anything that matches the pattern "data-scien"?  This will include all levels of data scientists and other job titles that have this pattern in it.
 
 ```{r, message=FALSE}
-## show top keywords for anything like data scientist
+# show top keywords for anything like data scientist
 top_data_scientist_all<-
   results %>%
   subset(str_detect(role_desc,"data-scien")) %>%
@@ -164,7 +168,7 @@ qplot(data = top_data_scientist_all, x = reorder(keyword_desc, -n), y=n, xlab="K
         axis.text.x = element_text(angle=90, vjust=1))   
 ```
 
-It's the same four skills in a different order: Python, SQL, Hadoop, and Excel.  R is now on the chart with 6.
+We have machine learning, Python, Statistics, Math, SQL, data mining, communication, and R. 
 
 Where are these jobs being offered?  We collected the city and state information with these job postings:
 ```{r}
@@ -175,7 +179,7 @@ names(distinct_city)<-c("city","Freq")
 head(arrange(distinct_city,desc(Freq)), n=10)
 ```
 
-Seattle is the top city at 64, followed by Chicago at 10, and Plano at 9.
+Seattle is the top city at 69, followed by Chicago at 10, and Plano at 9.
 
 What is your city's favorite data science skill?
 
@@ -224,6 +228,6 @@ datatable(keyword_vs_state)
 ```
 
 ### Conclusion
-Our team found that many skills we expected to be popular were: Python, Excel, big data technologies, SQL.  The most surprising result is that R is not as popular as we thought it would be or should be.  This may be due to the difficulty of extracting "R" from the text of a job description, as we would expect it to be on par with Python in popularity.  This would be something that we would investigate for further analysis.
+Our team found that many skills we expected to be popular were: Python, Excel, big data technologies, machine learning, SQL.  Perhaps most surprising is that "communication" is the top skill. Clearly, "soft skills" are still very important even for more technically oriented data scientists.
 
-
+Another surprising result was that R is not as popular as we thought it would be.  This may be due to the difficulty of extracting "R" from the text of a job description, as we would expect it to be on par with Python in popularity.  We did some work on getting better extraction of "R", and while its numbers did improve, it still lags behind Python by quite a bit.
