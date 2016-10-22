@@ -36,10 +36,9 @@ Below we are loading the necessary libraries, reading the file with URLs, parsin
 library(boilerpipeR)
 library(RCurl)
 library(stringr)
-library(stringi)
 
 #read the file with urls
-list = read.csv("c:/data/links.csv", stringsAsFactors = FALSE)
+list = read.csv("https://cdn.rawgit.com/dhnanjay/607Project3/master/directlinks/links.csv", stringsAsFactors = FALSE)
 
 
 #parsing each url and saving job text into description column
@@ -73,6 +72,9 @@ for (i in 1:nrow(list))
   list$City[i] = r_extract[3]
   list$State[i] = r_extract[4]
 }
+
+#writing dataframe to a csv
+write.csv(list, file = "monster.csv")
 ```
 
 #####Conclusion:
