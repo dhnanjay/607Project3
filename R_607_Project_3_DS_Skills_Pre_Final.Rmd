@@ -42,7 +42,7 @@ library(stringi)
 list = read.csv("c:/data/links.csv", stringsAsFactors = FALSE)
 
 
-parsing each url and saving job text into description column
+#parsing each url and saving job text into description column
 for (i in 1:nrow(list))
 {
   content <- getURL(list$Link[i])
@@ -94,19 +94,17 @@ library(dplyr)
 library(stringr)
 
 
-##Load data from local drive
+#Load data from local drive
 
 {r load_data, include=TRUE}
 data.raw <- read.csv("monster.csv", header = TRUE, stringsAsFactors = FALSE)
 data.raw[] <- lapply(data.raw, tolower)
 
 
-##Load keyword tags
+#Load keyword tags
 
 
 #HEAD
-tags <- c(' r ',' r . ', ' c++ ', 'python', 'java', 'ruby', 'javascript',
-
 tags <- c(' r ',' r. ', ' c++ ', 'python', 'java', 'ruby', 'javascript',
 			    'matlab', 'scala', 'excel',	'tableau', 'd3.js', 'sas','spss',	'd3',
           'hadoop', 'mapreduce',	'spark', 'pig',	'hive',	'shark','oozie',
@@ -155,8 +153,7 @@ Although the data acquisition, exploration and analysis processes were conducted
 
 * Read data from data acquisition process into data frame (note: in the code below, the data was read in from a csv file, but could just as easily be read in directly from the web scraping output).  
 * Transform data to ready it for import into the correct database tables. In this particular case, there are three tables to house unique roles, locations and keywords, and there are two tables that facilitate the many-to-many relationships.  
-* Create connection to MySQL database and import data into respective tables.  
-* Finally, the MySQL database was hosted via AWS RDS; the MySQL setup script can be located on the Github repository here: https://github.com/dhnanjay/607Project3/blob/master/sk_skills.sql 
+* Create connection to MySQL database and import data into respective tables. 
 
 
 #####Future Work:
@@ -191,7 +188,7 @@ my_data <- read.csv("data.csv", stringsAsFactors = FALSE)
 # * Repeat process for each of the five database tables  
 
 
-roles df
+#roles df
 role_desc <- unique(str_replace(my_data$Job_Title, "\\'", ""))  # BH: removed apostrophes for SQL 
 
 #import
@@ -202,7 +199,7 @@ insertValues = paste(unlist(roles$insertValue), collapse = ', ')
 insertQry = dbSendQuery(myDb, paste0("INSERT INTO roles VALUES ", insertValues, ";"))
 fetch(insertQry, n = -1)
 
-location df
+#location df
 locations <- unique(my_data[,c("City","State")])
 locations <- cbind(loc_id =  seq.int(nrow(locations)), locations)
 locations = locations %>% mutate(insertValue = paste0("(", loc_id, ", '", City, "', '", State, "')"))
@@ -210,7 +207,7 @@ insertValues = paste(unlist(locations$insertValue), collapse = ', ')
 insertQry = dbSendQuery(myDb, paste0("INSERT INTO locations VALUES ", insertValues, ";"))
 fetch(insertQry, n = -1)
 
-keywords df
+#keywords df
 key_list <- unlist(str_split(tolower(my_data$keywordtag),","))
 key_desc <- unique(key_list[key_list!=""])
 key_id <- seq.int(length(key_desc))
@@ -220,7 +217,7 @@ insertValues = paste(unlist(keywords$insertValue), collapse = ', ')
 insertQry = dbSendQuery(myDb, paste0("INSERT INTO keywords VALUES ", insertValues, ";"))
 fetch(insertQry, n = -1)
 
-post_keys df
+#post_keys df
 key_list <- str_split(tolower(my_data$keywordtag),",")
 key_list <- lapply(key_list,unique)
 post_id = integer(); key_desc = character()
@@ -239,10 +236,10 @@ insertValues = paste(unlist(post_keys$insertValue), collapse = ', ')
 insertQry = dbSendQuery(myDb, paste0("INSERT INTO post_keys VALUES ", insertValues, ";"))
 fetch(insertQry, n = -1)
 
-jobs df
+#jobs df
 jobs <- my_data
 names(jobs)[names(jobs)=="Job_Title"] <- "role_desc"
-jobs$post_id <-seq.int(nrow(jobs))
+names(jobs)[names(jobs)=="X.1"] <- "post_id"
 jobs <- merge(jobs, roles, by ="role_desc")
 jobs <- merge(jobs, locations, by= c("City","State"))
 jobs <- subset(jobs, select= c(post_id,role_id,loc_id))
@@ -592,7 +589,7 @@ results4 <- results3
 
 # Add a row sum
 results5 <- transform(results4, sum=rowSums(results4[,-1]))
-head(results5)
+#head(results5)
 
 # Obtain two columns role_desc and sum
 results6 <-  results5[ , c("role_desc","sum")]
@@ -662,7 +659,7 @@ names(wide_2) <- sub(" ", "", names(wide_2))
 #names(wide_2)
 #head(wide_2)
 wide_3 <- subset(wide_2,select= -c(row2))
-head(wide_3)
+#head(wide_3)
 #list(wide_3$role_desc)
 wide_4 <- wide_3
 wide_4$role2 <- gsub(" r ","r",wide_4$role_desc)
@@ -889,7 +886,7 @@ mean(p3 == wide_5_train$role2)
 
 # Prediction - full test data - training data set
 p4 <- predict(rf3,wide_5_test)
-p4
+#p4
 
 # Accuracy - full test data - training model
 mean(p4 == wide_5_test$role2)
