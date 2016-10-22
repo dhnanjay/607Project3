@@ -133,17 +133,13 @@ tags <- c(' r ',' r. ', ' c++ ', 'python', 'java', 'ruby', 'javascript',
 
 
 #Extract keywords from "description" column and create new column with keywords
-
-
 tag_ex <- paste0('(', paste(tags, collapse = '|'), ')')
 data <- data.raw %>%
 mutate(keywordtag = sapply(str_extract_all(description, tag_ex), function(x) paste(x, collapse=',')))
 
 
 #Create .csv file
-write.csv(data, file = "data1.csv", row.names = FALSE)
-
-write.csv(data, file = "data2.csv", row.names = FALSE)
+write.csv(data, file = "data.csv", row.names = FALSE)
 ```
 * * *
 
@@ -910,3 +906,12 @@ The larger data set (188 roles) produced  prediction of data scientist for 75 in
 2). Vigorously prune the data, and iterate, until best results are achieved.
 
 * * *
+
+### Team Conclusion:
+
+This project was an *iterative process* to steadily improve the quality of the data imported, processed, and analyzed.  There was a *discovery process* involved in scraping job websites and as to which processes worked and which didn't work.  *New tools* were discovered such as bulkdachecker and the library boilerpipeR.  Techniques were implemented to better capture additional keywords.  A *database* process was setup that is *flexible* to handle many-to-many relationships and setup a *robust database structure five tables* and a database process that could be *run repeatedly* and eliminate any duplicates during the load process.  Also the database was setup for *web access* using amazon web services.  
+
+*Extensive graphs* were provided to evaluate the data. Overall  the top skills were communication, followed by Excel, JAVA, SQL, machine learning, and Python.  For *data scientists*, Machine learning, Excel, Python, statistics, Hadoop, R, and communication were the top skills found.  Job postings were analyzed for top cities (Seattle, Chicago, and Plano,Texas) and states (Washington, California, and Texas) offering data science jobs.  There was an interactive graph to view the most popular data science skills by a user selected city using the R datatable function.  Predictive analytics (ctree, predict, and random forest) were done to show what role a person is bested suited for based on his or her skills.  Techniques were shown to *improve the accuracy* of the models.
+
+The group learned to work together as a data science team, sharing technologies and techniques learned along the way, expanding skills in collaboration, planning, and delivering on time within a structure as directed by the project manager.
+
