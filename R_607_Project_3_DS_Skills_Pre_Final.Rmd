@@ -155,7 +155,8 @@ Although the data acquisition, exploration and analysis processes were conducted
 
 * Read data from data acquisition process into data frame (note: in the code below, the data was read in from a csv file, but could just as easily be read in directly from the web scraping output).  
 * Transform data to ready it for import into the correct database tables. In this particular case, there are three tables to house unique roles, locations and keywords, and there are two tables that facilitate the many-to-many relationships.  
-* Create connection to MySQL database and import data into respective tables. 
+* Create connection to MySQL database and import data into respective tables.  
+* Finally, the MySQL database was hosted via AWS RDS; the MySQL setup script can be located on the Github repository here: https://github.com/dhnanjay/607Project3/blob/master/sk_skills.sql 
 
 
 #####Future Work:
@@ -241,7 +242,7 @@ fetch(insertQry, n = -1)
 jobs df
 jobs <- my_data
 names(jobs)[names(jobs)=="Job_Title"] <- "role_desc"
-names(jobs)[names(jobs)=="X.1"] <- "post_id"
+jobs$post_id <-seq.int(nrow(jobs))
 jobs <- merge(jobs, roles, by ="role_desc")
 jobs <- merge(jobs, locations, by= c("City","State"))
 jobs <- subset(jobs, select= c(post_id,role_id,loc_id))
